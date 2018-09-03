@@ -2,22 +2,24 @@
 # ================================
 # Author: Daniel J. Umpierrez
 # --------------------------------
-# Modified: 28-08-2018 18:12
+# Modified: 03-09-2018 02:23
 # ================================
 
-# XWindow clipboard aliases
-# -------------------------------
-# Selection
-# -------------------------------
-alias selection_get_select='xsel'
-alias selection_del='xsel -c'
-# -------------------------------
-# Clipboard
-# -------------------------------
-alias clip_paste='xsel -b -o '
-alias clip_copy='xsel -b -i '
-alias clip_append='xsel -b -a '
-alias clip_reset='xsel -b -c '
+if [ "$(tset -q)" != 'linux' ]; then
+  # XWindow clipboard aliases
+  # -------------------------------
+  # Selection
+  # -------------------------------
+  alias selection_get_select='xsel'
+  alias selection_del='xsel -c'
+  # -------------------------------
+  # Clipboard
+  # -------------------------------
+  alias clip_paste='xsel -b -o '
+  alias clip_copy='xsel -b -i '
+  alias clip_append='xsel -b -a '
+  alias clip_reset='xsel -b -c '
+fi
 
 alias clear-format='sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g"'
 alias isort='python3 -m isort -d '
