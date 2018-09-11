@@ -17,7 +17,7 @@ declare -x declare_list
 declare -x cmdcheck
 declare -x cmdrun
 
-DOTENV_DIR="$HOME/Development/dotenv"
+DOTENV_DIR="$HOME/.dotfiles"
 
 FUNCTIONS_DIR="${DOTENV_DIR}/functions"
 ALIASES_DIR="${DOTENV_DIR}/aliases"
