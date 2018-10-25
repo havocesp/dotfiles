@@ -6,10 +6,10 @@
 # ================================
 
 #if not_declared "msg_debug"; then
-export -f msg_error
-export -f msg_info
-export -f msg_debug
-export -f msg_warn
+declare -x msg_error
+declare -x msg_info
+declare -x msg_debug
+declare -x msg_warn
 
 declare TIME_FMT
 declare DATE_FMT

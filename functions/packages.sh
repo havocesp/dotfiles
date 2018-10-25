@@ -5,29 +5,29 @@
 # Modified: 23-08-2018 17:02
 # ================================
 
-export -f get_python_dirs
-export -f get_module_dirs
-export -f get_class_module
-export -f get_installed_list
-export -f get_most_common
-export -f get_pip_installed
-export -f is_installed
-export -f is_installable
-export -f get_pip3_installed
-export -f get_pip3_outdated
-export -f get_pip_outdated
-export -f is_pip_installable
-export -f is_pip_installed
-export -f is_pip3_installed
-export -f is_pip3_installable
-export -f aptcs
-export -f pip_info
+declare -x get_python_dirs
+declare -x get_module_dirs
+declare -x get_class_module
+declare -x get_installed_list
+declare -x get_most_common
+declare -x get_pip_installed
+declare -x is_installed
+declare -x is_installable
+declare -x get_pip3_installed
+declare -x get_pip3_outdated
+declare -x get_pip_outdated
+declare -x is_pip_installable
+declare -x is_pip_installed
+declare -x is_pip3_installed
+declare -x is_pip3_installable
+declare -x aptcs
+declare -x pip_info
 
 function pip_info() {
 	local pip_cmd
 	pip_cmd="pip"
   if test $# -eq 2 && echo -en "pip" | grep -q; then
-    
+    echo -n # TODO
   fi
 	if [ $# -eq 1 ] && which pip3 >/dev/null; then
 		local temp_dir
@@ -172,7 +172,7 @@ function apt_list_installed() {
 	dpkg-query -l | grep ^ii | cut -d' ' -f3
 }
 
-function apt_ensure_installed) {
+function apt_ensure_installed() {
 	get_installed_list | grep -q "${1:-FAIL}" || return 1
 }
 
