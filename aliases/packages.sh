@@ -17,7 +17,7 @@ alias pipiu='pip install --user '
 alias pipiuu='pip install --user -U '
 
 # python venv
-alias venv_init='source $HOME/.local/venvs/v3/bin/activateX'
+alias venv_init='source $HOME/.local/venvs/v3/bin/activate'
 
 alias pip-pkgver='pip3 freeze | grep -i '
 
