@@ -10,10 +10,14 @@
 alias pip3s='pip3 search '
 alias pip3iu='pip3 install --user '
 alias pip3iuu='pip3 install --user -U '
+
 # default pip (usually 2.7 version)
 alias pips='pip search '
 alias pipiu='pip install --user '
 alias pipiuu='pip install --user -U '
+
+# python venv
+alias venv_init='source $HOME/.local/venvs/v3/bin/activateX'
 
 alias pip-pkgver='pip3 freeze | grep -i '
 
