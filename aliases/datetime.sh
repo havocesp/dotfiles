@@ -23,11 +23,14 @@ alias localtime='hms'
 alias localdatetime='dmyhms'
 alias datetime='ymdhms'
 
-alias epoch2secs="grep --color=no -oE '15[0-9]{8}'"
-alias xsel2epoch="xsel -b -o | grep --color=no -oE '15[0-9]{8}' || xsel -o | grep --color=no -oE '15[0-9]{8}' || date +%s"
-alias epoch2hms="date -d @$(xsel -b -o | grep --color=no -oE '15[0-9]{8}' || xsel -o | grep --color=no -oE '15[0-9]{8}' || date +%s) +%X"
-alias epoch2ymd_hms="date -d @$(xsel -b -o | grep --color=no -oE '15[0-9]{8}' || xsel -o | grep --color=no -oE '15[0-9]{8}' || date +%s) +'%F %X'"
-alias epoch2ymd_hm="date -d @$(xsel -b -o | grep --color=no -oE '15[0-9]{8}' || xsel -o | grep --color=no -oE '15[0-9]{8}' || date +%s) +'%F %R'"
-alias epoch2locale="date -d @$(xsel -b -o | grep --color=no -oE '15[0-9]{8}' || xsel -o | grep --color=no -oE '15[0-9]{8}' || date +%s) +'%D %r'"
-alias epoch2d_b_hms="date -d @$(xsel -b -o | grep --color=no -oE '15[0-9]{8}' || xsel -o | grep --color=no -oE '15[0-9]{8}' || date +%s) +'%d %b %r'"
-alias epoch2d_b_hm="date -d @$(xsel -b -o | grep --color=no -oE '15[0-9]{8}' || xsel -o | grep --color=no -oE '15[0-9]{8}' || date +%s) +'%d %b %R'"
+if grep -q xterm <<<"$(tset -q)"
+then
+    alias epoch2secs="grep --color=no -oE '15[0-9]{8}'"
+    alias xsel2epoch="xsel -b -o | grep --color=no -oE '15[0-9]{8}' || xsel -o | grep --color=no -oE '15[0-9]{8}' || date +%s"
+    alias epoch2hms="date -d @$(xsel -b -o | grep --color=no -oE '15[0-9]{8}' || xsel -o | grep --color=no -oE '15[0-9]{8}' || date +%s) +%X"
+    alias epoch2ymd_hms="date -d @$(xsel -b -o | grep --color=no -oE '15[0-9]{8}' || xsel -o | grep --color=no -oE '15[0-9]{8}' || date +%s) +'%F %X'"
+    alias epoch2ymd_hm="date -d @$(xsel -b -o | grep --color=no -oE '15[0-9]{8}' || xsel -o | grep --color=no -oE '15[0-9]{8}' || date +%s) +'%F %R'"
+    alias epoch2locale="date -d @$(xsel -b -o | grep --color=no -oE '15[0-9]{8}' || xsel -o | grep --color=no -oE '15[0-9]{8}' || date +%s) +'%D %r'"
+    alias epoch2d_b_hms="date -d @$(xsel -b -o | grep --color=no -oE '15[0-9]{8}' || xsel -o | grep --color=no -oE '15[0-9]{8}' || date +%s) +'%d %b %r'"
+    alias epoch2d_b_hm="date -d @$(xsel -b -o | grep --color=no -oE '15[0-9]{8}' || xsel -o | grep --color=no -oE '15[0-9]{8}' || date +%s) +'%d %b %R'"
+fi

@@ -6,7 +6,7 @@
 # ================================
 
 ### Variables
-declare DOTENV_DIR
+declare DOTFILES_DIR
 declare FUNCTIONS_DIR ALIASES_DIR
 
 ### Functions
@@ -17,13 +17,10 @@ declare -x declare_list
 declare -x cmdcheck
 declare -x cmdrun
 
-DOTENV_DIR="$HOME/Development/dotenv"
+DOTFILES_DIR="$HOME/.dotfiles"
 
-FUNCTIONS_DIR="${DOTENV_DIR}/functions"
-ALIASES_DIR="${DOTENV_DIR}/aliases"
-
-# function lcase { echo "${*,,}"}
-# function ucase { echo "${*~~}" }
+FUNCTIONS_DIR="${DOTFILES_DIR}/functions"
+ALIASES_DIR="${DOTFILES_DIR}/aliases"
 
 function declare_list() {
     echo -e "$(declare -p)$(declare -F)" | sed 's/declare [xfrFiaA-]*[ ]//g' | grep --color=no -E '^[a-zA-Z]'
@@ -74,5 +71,4 @@ function init_dotenv() {
         cmdcheck notify-send && notify-send -i error '[DotFiles]' "$report"
         echo -e "$report"
     fi
-
 }
