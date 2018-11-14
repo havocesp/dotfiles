@@ -47,6 +47,11 @@ function cmdcheck() {
     which "${1:-fail}" >/dev/null
 }
 
+# sudo alias for android termux
+if cmdcheck tsu;then
+    alias sudo="tsu"
+fi
+
 # init dof files.
 function init_dotenv() {
     local dotfile
