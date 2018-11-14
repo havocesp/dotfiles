@@ -23,10 +23,16 @@ alias localtime='hms'
 alias localdatetime='dmyhms'
 alias datetime='ymdhms'
 
+<<<<<<< HEAD
 alias epoch2secs="grep --color=no -oE '15[0-9]{8}'"
 
 if which xsel > /dev/null && grep -q xterm <<<"$(tset -q)" && [[ -n "$DISPLAY" ]]
 then
+=======
+if grep -q xterm <<<"$(tset -q)"
+then
+    alias epoch2secs="grep --color=no -oE '15[0-9]{8}'"
+>>>>>>> 964ee698afcfeaac3ede8a03891e8a8600228512
     alias xsel2epoch="xsel -b -o | grep --color=no -oE '15[0-9]{8}' || xsel -o | grep --color=no -oE '15[0-9]{8}' || date +%s"
     alias epoch2hms="date -d @$(xsel -b -o | grep --color=no -oE '15[0-9]{8}' || xsel -o | grep --color=no -oE '15[0-9]{8}' || date +%s) +%X"
     alias epoch2ymd_hms="date -d @$(xsel -b -o | grep --color=no -oE '15[0-9]{8}' || xsel -o | grep --color=no -oE '15[0-9]{8}' || date +%s) +'%F %X'"
