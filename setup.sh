@@ -72,3 +72,5 @@ function init_dotenv() {
         echo -e "$report"
     fi
 }
+
+echo -e '# by dotfilles setup\ninit_dotenv' >> "$HOME/.bashrc"
