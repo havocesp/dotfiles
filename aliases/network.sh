@@ -23,5 +23,10 @@ alias youtube-to-mp3='youtube-dl --extract-audio --audio-format mp3 --audio-qual
 alias hitbtc-app='chromium --app=https://hitbtc.com/sso/signin'
 alias binance-app='chromium --app=https://www.binance.com/'
 alias cryptopia-app='chromium --app=https://www.cryptopia.co.nz/Login'
-# alias myip='echo  "$(echo -n " - [INFO] Requesting ... " >&2)|$(curl -s myip.dtdns.com || echo "FAIL" 1>&2)|)"'
+
 alias netfind='sudo netdiscover -r 192.168.1.0/24'
+
+# View HTTP traffic
+alias sniff="sudo ngrep -d 'en1' -t '^(GET|POST) ' 'tcp and port 80'"
+alias httpdump="sudo tcpdump -i en1 -n -s 0 -w - | grep -a -o -E \"Host\: .*|GET \/.*\""
+
