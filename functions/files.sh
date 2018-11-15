@@ -67,9 +67,9 @@ then
 function is_executable() {
     if test -x "${1:-FAIL}"
     then
-        echo -n 1
+        echo -n "1"
     else
-        echo -n 0
+        echo -n "0"
         return 1
     fi
 }
