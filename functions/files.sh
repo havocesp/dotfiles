@@ -12,7 +12,7 @@ declare -x newdirs
 declare -x extract
 
 function mdp() {
-	if [ $# -gt 0 ]; then
+	if [[ $# -gt 0 ]]; then
 		mkdir -p "$@"
 	else
 		echo ' - ERROR: invalid num of args.'
@@ -21,7 +21,7 @@ function mdp() {
 }
 
 function mdcd() {
-	if [ $# -ge 1 ]; then
+	if [[ $# -ge 1 ]]; then
 		mkdir -p ""$1"" && cd ""$1"" || return 1
 	else
 		msg_error ' - ERROR: invalid num of args.'
@@ -32,8 +32,8 @@ function mdcd() {
 
 function newdirs() {
 	while (($#)); do
-		case ""$1"" in
-		*) [ -d ""$1"" ] || mkdir -p "${1}" ;;
+		case "$1" in
+		*) [ -d "$1" ] || mkdir -p "${1}" ;;
 		esac
 		shift
 	done
@@ -65,11 +65,17 @@ then
 
 
 function is_executable() {
-    if test -x "${1:-FAIL}"
+    local verbose
+
+    if [[ "$1" == '-v' ]] || [[ "$1" == '--verbose' ]];then
+        verbose=1
+        shift
+    fi
+    if [[ -x "$1" ]]
     then
-        echo -n "1"
+        test "${verbose:-0}" -eq 1 && echo -n "$1"
     else
-        echo -n "0"
+        test "${verbose:-0}" -eq 1 && echo -n "$1"
         return 1
     fi
 }
