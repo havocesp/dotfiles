@@ -40,8 +40,9 @@ function newdirs() {
 }
 
 # extract all kinds of archived files
-function extract () {
-if [[ -r "$1" ]]; then
+function extract() {
+if [[ -r "$1" ]]
+then
     case "$1" in
         *.tar.bz2)  tar xjf "$1"     ;;
         *.tar.gz)   tar xzf "$1"     ;;
@@ -58,5 +59,17 @@ if [[ -r "$1" ]]; then
      esac
  else
      echo "$1 is not a valid file"
+     return 1
  fi
+}
+
+
+function is_executable() {
+    if test -x "${1:-FAIL}"
+    then
+        echo -n 1
+    else
+        echo -n 0
+        return 1
+    fi
 }
