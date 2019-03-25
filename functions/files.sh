@@ -10,6 +10,16 @@ declare -x mdp
 declare -x mdcd
 declare -x newdirs
 
+function win2unix_path() {
+    local pipe_data
+    read -t 1 pipe_data
+    if test -z "$pipe_data";then
+        echo "$*" | tr '\' '/'
+    else
+        echo "$pipe_data" | tr '\' '/'
+    fi
+}
+
 function mdp() {
 	if [ $# -gt 0 ]; then
 		mkdir -p "$@"
