@@ -25,6 +25,8 @@ alias datetime='ymdhms'
 
 alias epoch2secs="grep --color=no -oE '15[0-9]{8}'"
 
+alias timer='echo "Timer started. Stop with Ctrl-D." && date && time cat && date'
+
 if which xsel > /dev/null && grep -q xterm <<<"$(tset -q)" && [[ -n "$DISPLAY" ]]
 then
     alias epoch2secs="grep --color=no -oE '15[0-9]{8}'"
