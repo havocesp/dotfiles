@@ -4,6 +4,7 @@
 # --------------------------------
 # Modified: 24-08-2018 17:30
 # ================================
+set -Eeo pipefail
 
 ### Variables
 declare DOTFILES_DIR
@@ -19,8 +20,8 @@ declare -x cmdrun
 
 DOTFILES_DIR="$HOME/.dotfiles"
 
-FUNCTIONS_DIR="${DOTFILES_DIR}/functions"
-ALIASES_DIR="${DOTFILES_DIR}/aliases"
+FUNCS_DIR="${DOTFILES_DIR}/functions"
+ALIAS_DIR="${DOTFILES_DIR}/aliases"
 
 function declare_list() {
     echo -e "$(declare -p)$(declare -F)" | sed 's/declare [xfrFiaA-]*[ ]//g' | grep --color=no -E '^[a-zA-Z]'
@@ -44,38 +45,28 @@ function cmdrun() {
 
 # check command availability
 function cmdcheck() {
-    which "${1:-fail}" >/dev/null
+    command -v "${1:-fail}" >/dev/null
 }
 
 # sudo alias for android termux
-if cmdcheck tsu;then
-    alias sudo="tsu"
+if cmdcheck tsudo;then
+    alias sudo="tsudo"
 fi
 
 # init dof files.
 function init_dotenv() {
     local dotfile
-    local -i failed
     local -a dot_files
 
-    failed=0
+    dot_files+=($(find "$FUNCS_DIR" -type f -name '*.sh'))
+    dot_files+=($(find "$ALIAS_DIR" -type f -name '*.sh'))
 
-    for dotfile in $ALIASES_DIR/*.sh; do
-        dot_files+="$dotfile"
-        source "$dotfile" || echo " - ERROR: error during aliases file $dotfile import."
+    for dotfile in "${dot_files[@]}"; do
+        source "$dotfile" || echo " - ERROR: error during $dotfile import."
     done
-
-    for dotfile in $FUNCTIONS_DIR/*.sh; do
-        dot_files+="$dotfile"
-        source "$dotfile" || echo " - ERROR: error function file source $dotfile import."
-    done
-
-    if [ "$failed" -gt 0 ]; then
-        local report
-        report=" - [$(date +'%d %b %R')] Result:\n\n - ${failed} files has failed during boot proccess."
-        cmdcheck notify-send && notify-send -i error '[DotFiles]' "$report"
-        echo -e "$report"
-    fi
 }
 
-echo -e '# by dotfilles setup\ninit_dotenv' >> "$HOME/.bashrc"
+if ! grep -q init_dotenv "$HOME/.bash_aliases";then
+    echo -e "source \"$DOTFILES_DIR/setup.sh\"" >> "$HOME/.bash_aliases"
+    echo -e 'init_dotenv' >> "$HOME/.bash_aliases"
+fi
