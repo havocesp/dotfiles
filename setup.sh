@@ -4,10 +4,11 @@
 # --------------------------------
 # Modified: 24-08-2018 17:30
 # ================================
+set -Eeo pipefail
 
 ### Variables
 declare DOTFILES_DIR
-declare FUNCTIONS_DIR ALIASES_DIR
+declare FUNCS_DIR ALIAS_DIR
 
 ### Functions
 declare -x init_dotenv
@@ -19,23 +20,24 @@ declare -x cmdrun
 
 DOTFILES_DIR="$HOME/.dotfiles"
 
-FUNCTIONS_DIR="${DOTFILES_DIR}/functions"
-ALIASES_DIR="${DOTFILES_DIR}/aliases"
+FUNCS_DIR="${DOTFILES_DIR}/functions"
+ALIAS_DIR="${DOTFILES_DIR}/aliases"
 
 function declare_list() {
     echo -e "$(declare -p)$(declare -F)" | sed 's/declare [xfrFiaA-]*[ ]//g' | grep --color=no -E '^[a-zA-Z]'
 }
 
 function cmdrun() {
-    if [[ $# -lt 2 ]]; then
+    if [ $# -lt 2 ]; then
         echo " - Usage: cmdrun <message> <command>"
         return 1
     else
         echo -n " - $1 ... "
-        if command "$@" &>/dev/null; then
-            echo "[DONE]"
+
+        if eval "${@:2}" &>/dev/null; then
+            echo "[$(green DONE)]"
         else
-            echo "[FAIL]"
+            echo "[$(green FAIL)]"
             return 1
         fi
     fi
@@ -43,44 +45,28 @@ function cmdrun() {
 
 # check command availability
 function cmdcheck() {
-    command -v "${1:-fail}" &>/dev/null
+    command -v "${1:-fail}" >/dev/null
 }
 
 # sudo alias for android termux
-if cmdcheck tsu;then
-    alias sudo="tsu"
+if cmdcheck tsudo;then
+    alias sudo="tsudo"
 fi
 
 # init dof files.
 function init_dotenv() {
     local dotfile
-    local -i failed
     local -a dot_files
 
-    failed=0
+    dot_files+=($(find "$FUNCS_DIR" -type f -name '*.sh'))
+    dot_files+=($(find "$ALIAS_DIR" -type f -name '*.sh'))
 
-    while read -r dotfile; do
-        dot_files+="$dotfile"
-        source "$dotfile" || echo " - ERROR: error during aliases file $dotfile import."
-    done <<<$(find "$ALIASES_DIR" -name '*.sh')
-
-    while read -r dotfile; do
-        dot_files+="$dotfile"
-        source "$dotfile" || echo " - ERROR: error function file source $dotfile import."
-    done <<<$(find "$FUNCTIONS_DIR" -name '*.sh')
-
-    if [[ "$failed" -gt 0 ]]; then
-        local report
-        report=" - [$(date +'%d %b %R')] Result:\n\n - ${failed} files has failed during boot process."
-        cmdcheck notify-send && notify-send -i error '[DotFiles]' "$report"
-        echo -e "$report"
-    fi
+    for dotfile in "${dot_files[@]}"; do
+        source "$dotfile" || echo " - ERROR: error during $dotfile import."
+    done
 }
 
-if ! grep -q "init_dotenv" "$HOME/.bashrc";then
-	msg=" - Adding 'init_dotenv' function call to '.bashrc'"
-	line="source $DOTFILES_DIR/setup.sh\ninit_dotenv"
-	cmd=('echo' "-e" "$line" '>>' "$HOME/.bashrc")
-	echo "${cmd[@]}"
-    cmdrun "$msg" "$cmd"
+if ! grep -q init_dotenv "$HOME/.bash_aliases";then
+    echo -e "source \"$DOTFILES_DIR/setup.sh\"" >> "$HOME/.bash_aliases"
+    echo -e 'init_dotenv' >> "$HOME/.bash_aliases"
 fi
