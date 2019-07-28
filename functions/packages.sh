@@ -28,7 +28,7 @@ function pip_info() {
     if [[ $# -eq 1 ]] && which pip3 >/dev/null; then
         local temp_dir
         temp_dir="$(mktemp -d -p /tmp)"
-        eval "${pip_cmd}${ver} install --download ${temp_dir} -v $1"
+        eval "${pip_cmd} install --download ${temp_dir} -v $1"
     else
         return 16
     fi
@@ -62,12 +62,9 @@ function get_module_dirs() {
 }
 
 function is_pip_installed() {
-    local version
-    if [[ $# -ge 1  ]]
-    then
+    if [[ $# -ge 1  ]];then
         if [[ "${1:-0}" == "3" ]]
         then
-            version="3"
             get_pip_installed "$1"  | grep -q "$1"
         else
             return 1
