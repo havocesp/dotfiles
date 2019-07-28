@@ -27,16 +27,15 @@ function declare_list() {
 }
 
 function cmdrun() {
-    if [ $# -lt 2 ]; then
+    if [[ $# -lt 2 ]]; then
         echo " - Usage: cmdrun <message> <command>"
         return 1
     else
         echo -n " - $1 ... "
-
-        if eval "${@:2}" &>/dev/null; then
-            echo "[$(green DONE)]"
+        if command "$@" &>/dev/null; then
+            echo "[DONE]"
         else
-            echo "[$(green FAIL)]"
+            echo "[FAIL]"
             return 1
         fi
     fi
@@ -44,7 +43,7 @@ function cmdrun() {
 
 # check command availability
 function cmdcheck() {
-    which "${1:-fail}" >/dev/null
+    command -v "${1:-fail}" &>/dev/null
 }
 
 # sudo alias for android termux
@@ -60,22 +59,28 @@ function init_dotenv() {
 
     failed=0
 
-    for dotfile in $ALIASES_DIR/*.sh; do
+    while read -r dotfile; do
         dot_files+="$dotfile"
         source "$dotfile" || echo " - ERROR: error during aliases file $dotfile import."
-    done
+    done <<<$(find "$ALIASES_DIR" -name '*.sh')
 
-    for dotfile in $FUNCTIONS_DIR/*.sh; do
+    while read -r dotfile; do
         dot_files+="$dotfile"
         source "$dotfile" || echo " - ERROR: error function file source $dotfile import."
-    done
+    done <<<$(find "$FUNCTIONS_DIR" -name '*.sh')
 
-    if [ "$failed" -gt 0 ]; then
+    if [[ "$failed" -gt 0 ]]; then
         local report
-        report=" - [$(date +'%d %b %R')] Result:\n\n - ${failed} files has failed during boot proccess."
+        report=" - [$(date +'%d %b %R')] Result:\n\n - ${failed} files has failed during boot process."
         cmdcheck notify-send && notify-send -i error '[DotFiles]' "$report"
         echo -e "$report"
     fi
 }
 
-echo -e '# by dotfilles setup\ninit_dotenv' >> "$HOME/.bashrc"
+if ! grep -q "init_dotenv" "$HOME/.bashrc";then
+	msg=" - Adding 'init_dotenv' function call to '.bashrc'"
+	line="source $DOTFILES_DIR/setup.sh\ninit_dotenv"
+	cmd=('echo' "-e" "$line" '>>' "$HOME/.bashrc")
+	echo "${cmd[@]}"
+    cmdrun "$msg" "$cmd"
+fi
